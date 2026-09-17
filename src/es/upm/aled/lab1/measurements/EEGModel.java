@@ -182,7 +182,7 @@ public class EEGModel{
 			gui.plotMeasurement(m);
 	}
 
-	/**
+	/** 
 	 * Initializes the GUI for plotting the measurements. Supports an arbitrary
 	 * number of channels, but each max an min value for each channel must be
 	 * specified, to properly scale the GUI.
@@ -190,7 +190,7 @@ public class EEGModel{
 	 * @param minY      Array of min values for each channel.
 	 * @param maxY      Array of max values for each channel.
 	 * @param nChannels Number of channels. Length of minY and maxY must mach this
-	 *                  value.
+	 *                  value. 
 	 * @param sRate     Rate at which the samples are plotted (in ms).
 	 */
 	protected void initGUI(float[] minY, float[] maxY, int nChannels, int sRate) {
