@@ -1,12 +1,15 @@
 package es.upm.aled.lab1.measurements;
 
+import java.io.BufferedWriter;
 import java.io.DataInput;
 import java.io.DataInputStream;
+import java.io.DataOutput;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -120,6 +123,7 @@ public class EEGModel {
 				channels[i - 1] = Float.parseFloat(columns[i]);
 			addMeasurement(new Measurement(channels));
 		}
+		
 		fis.close();
 	}
 
@@ -130,6 +134,14 @@ public class EEGModel {
 	 * @throws IOException Thrown if the file can't be written.
 	 */
 	public void saveFile(String fileName) throws IOException {
+		File f = new File(fileName);
+		FileOutputStream fis = new FileOutputStream(f);
+		PrintStream ps = new PrintStream(fis);
+		int numero = 0;
+		for ( Measurement m : measurements) {
+			ps.println(numero%256 +","+m.getChannel(numero));
+				
+		} ps.close();
 		
 		
 		
@@ -258,7 +270,12 @@ public class EEGModel {
 		} else {
 			EEGModel eeg = new EEGModel();
 			eeg.createSyntheticData(1000);
-			// TODO
+			try{
+				eeg.saveFile("Synthetic.txt");// TODO
+			}catch (Exception e) {
+			
+			}
+			
 			
 		}
 	}
