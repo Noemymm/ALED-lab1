@@ -23,7 +23,7 @@ import es.upm.aled.lab1.gui.EEG_GUI;
  * @author mmiguel, rgarciacarmona
  *
  */
-public class EEGModel {
+public class EEGModel{
 
 	protected List<Measurement> measurements = new ArrayList<Measurement>();
 	protected EEG_GUI gui;
@@ -56,7 +56,12 @@ public class EEGModel {
 	 * @param measurements The Measurements that make up the EEGModel.
 	 */
 	public EEGModel(Measurement[] measurements) {
-		// TODO
+		this.measurements = new ArrayList<>();
+		for (Measurement m : measurements) {
+			if (measurements != null) {
+				this.measurements.add(m);
+		    }
+		}
 		
 	}
 
@@ -89,9 +94,7 @@ public class EEGModel {
 	 * @return The new EEGModel.
 	 */
 	public EEGModel filter(Filter filter) {
-		// TODO
-		
-		return null;
+		return filter.applyFilter(this);
 	}
 
 	/**
@@ -130,9 +133,21 @@ public class EEGModel {
 	 * @throws IOException Thrown if the file can't be written.
 	 */
 	public void saveFile(String fileName) throws IOException {
-		// TODO
+		int number = 0;
+		File f = new File(fileName);
+		FileOutputStream fis = new FileOutputStream (f);
+		PrintStream ps = new PrintStream(fis);
+		int numChannels = measurements.get(0).numChannels();
+		float [] channels = new float[numChannels];
+		for (Measurement m : measurements) { 				
+			for(int j=0; j<numChannels; j++) {
+				ps.print(number%256+", "+ m.getChannel(j)+ "\n");
+			    number++;
+			} 
+		}
+		}	
 		
-	}
+	
 
 	/**
 	 * Plots the data of the EEGModel using the classes in the es.upm.aled.lab1.gui
@@ -254,8 +269,12 @@ public class EEGModel {
 		} else {
 			EEGModel eeg = new EEGModel();
 			eeg.createSyntheticData(1000);
-			// TODO
+			try {
+			eeg.saveFile("Synthetic.txt");
 			
+		    }catch(Exception e){
+			
+		     }
 		}
-	}
+	 }
 }
