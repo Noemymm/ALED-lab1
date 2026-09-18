@@ -123,6 +123,7 @@ public class EEGModel{
 				channels[i - 1] = Float.parseFloat(columns[i]);
 			addMeasurement(new Measurement(channels));
 		}
+		
 		fis.close();
 	}
 
@@ -139,11 +140,12 @@ public class EEGModel{
 		PrintStream ps = new PrintStream(fis);
 		int numChannels = measurements.get(0).numChannels();
 		float [] channels = new float[numChannels];
-		for (Measurement m : measurements) { 				
+		for (Measurement m : measurements) { 
+			ps.print(number%256+", ");
+			number++;
 			for(int j=0; j<numChannels; j++) {
-				ps.print(number%256+", "+ m.getChannel(j)+ "\n");
-			    number++;
-			} 
+				ps.print(m.getChannel(j)+", ");   
+			} ps.println("\n");
 		}
 		}	
 		
@@ -151,7 +153,7 @@ public class EEGModel{
 
 	/**
 	 * Plots the data of the EEGModel using the classes in the es.upm.aled.lab1.gui
-	 * package. The max and min values of each channel area calculated so the window
+	 * package. The max and  min values  of each channel area calculated so the window
 	 * is properly scaled. Assumes a sampling frequency of 250 Hz.
 	 */
 	public void plotData() {
@@ -183,6 +185,7 @@ public class EEGModel{
 	}
 
 	/** 
+	 * 
 	 * Initializes the GUI for plotting the measurements. Supports an arbitrary
 	 * number of channels, but each max an min value for each channel must be
 	 * specified, to properly scale the GUI.
@@ -264,7 +267,11 @@ public class EEGModel{
 		if (args.length > 0) {
 			EEGModel eeg = new EEGModel(args[0]);
 			eeg.plotData();
-			// TODO
+			try {
+			eeg.loadFile("OpenBCI_raw_1.txt");
+			}catch(Exception e){
+				
+			}
 			
 		} else {
 			EEGModel eeg = new EEGModel();
