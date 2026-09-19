@@ -32,6 +32,7 @@ public class EEGModel{
 	 * Builds an empty EEGModel.
 	 */
 	public EEGModel() {
+	
 	}
 
 	/**
@@ -266,10 +267,17 @@ public class EEGModel{
 	public static void main(String[] args) {
 		if (args.length > 0) {
 			EEGModel eeg = new EEGModel(args[0]);
-			eeg.plotData();
 			try {
 			eeg.loadFile("OpenBCI_raw_1.txt");
+			int numChannels = eeg.getMeasurements()[0].numChannels();
+			int[] validChannels = {numChannels-3, numChannels-2, numChannels-1} ;
+			eeg.filter( new FilterExtractChannels(validChannels));
+			int min = 2750;
+			int max = 5750;
+			eeg.filter(new FilterExtractPeriod(min, max));
+			eeg.plotData();
 			}catch(Exception e){
+				e.printStackTrace();
 				
 			}
 			

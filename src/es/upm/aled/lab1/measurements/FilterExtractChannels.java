@@ -23,8 +23,8 @@ public class FilterExtractChannels implements Filter {
 	public EEGModel applyFilter(EEGModel eeg) {
 		EEGModel filteredEEG = new EEGModel();
 		Measurement[] eggMeasurements = eeg.getMeasurements();
-		float[] channelsFiltered = new float[validChannels.length];
 		for(Measurement m : eggMeasurements) {
+			float[] channelsFiltered = new float[validChannels.length];
 			int posicion = 0; //innecesaria pero así se entiende mejor el código
 			for(int i=0; i<validChannels.length; i++){
 				int canalSelected = validChannels[i];
