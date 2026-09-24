@@ -32,6 +32,11 @@ public class EEGModel{
 	 * Builds an empty EEGModel.
 	 */
 	public EEGModel() {
+		
+	}
+	
+	public EEGModel(List<Measurement> measurements) {
+		this.measurements = measurements;
 	
 	}
 
@@ -139,15 +144,13 @@ public class EEGModel{
 		File f = new File(fileName);
 		FileOutputStream fis = new FileOutputStream (f);
 		PrintStream ps = new PrintStream(fis);
-		int numChannels = measurements.get(0).numChannels();
-		float [] channels = new float[numChannels];
 		for (Measurement m : measurements) { 
 			ps.print(number%256+", ");
 			number++;
-			for(int j=0; j<numChannels; j++) {
+			for(int j=0; j<m.numChannels(); j++) {
 				ps.print(m.getChannel(j)+", ");   
 			} ps.println("\n");
-		}
+		}ps.close();
 		}	
 		
 	
@@ -266,28 +269,33 @@ public class EEGModel{
 
 	public static void main(String[] args) {
 		if (args.length > 0) {
-			EEGModel eeg = new EEGModel(args[0]);
-			try {
-			eeg.loadFile("OpenBCI_raw_1.txt");
-			int numChannels = eeg.getMeasurements()[0].numChannels();
-			int[] validChannels = {numChannels-3, numChannels-2, numChannels-1} ;
-			eeg.filter( new FilterExtractChannels(validChannels));
+			EEGModel eeg = new EEGModel("OpenBCI_raw_1.txt");
+			//eeg.plotData();
+			int[] validChannels = {8,9,10} ;
+			Filter channelFilter = new FilterExtractChannels(validChannels);
 			int min = 2750;
 			int max = 5750;
-			eeg.filter(new FilterExtractPeriod(min, max));
+			Filter periodFilter = new FilterExtractPeriod(min,max);
+			EEGModel filteredModel = eeg.filter(channelFilter).filter(periodFilter);
 			eeg.plotData();
-			}catch(Exception e){
+			try {
+				filteredModel.saveFile("FilteredData.txt");
+			}catch (IOException e) {
+				System.out.println("Error writing file");
 				e.printStackTrace();
-				
 			}
 			
+				
 		} else {
 			EEGModel eeg = new EEGModel();
 			eeg.createSyntheticData(1000);
 			try {
 			eeg.saveFile("Synthetic.txt");
-			
+			EEGModel eegFromFile = new EEGModel("SyntheticData.txt");
+			eegFromFile.plotData();
 		    }catch(Exception e){
+		    	System.out.println("Error writing file");
+		    	e.printStackTrace();
 			
 		     }
 		}

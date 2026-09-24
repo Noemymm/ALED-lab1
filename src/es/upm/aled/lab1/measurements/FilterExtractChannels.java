@@ -1,5 +1,8 @@
 package es.upm.aled.lab1.measurements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Filter that extracts the specified channels from an EEGModel.
  * 
@@ -21,19 +24,41 @@ public class FilterExtractChannels implements Filter {
 
 	@Override
 	public EEGModel applyFilter(EEGModel eeg) {
-		EEGModel filteredEEG = new EEGModel();
-		Measurement[] eggMeasurements = eeg.getMeasurements();
-		for(Measurement m : eggMeasurements) {
-			float[] channelsFiltered = new float[validChannels.length];
-			int posicion = 0; //innecesaria pero así se entiende mejor el código
-			for(int i=0; i<validChannels.length; i++){
-				int canalSelected = validChannels[i];
-				channelsFiltered[posicion]=m.getChannel(canalSelected);
-				posicion++;
-			} filteredEEG.addMeasurement(new Measurement(channelsFiltered));
-		} 
-		
-		return filteredEEG; //TODO
+		Measurement[] orMeasurements = eeg.getMeasurements();
+		Measurement[] filtMeasurements = new Measurement[eeg.getMeasurements().length];
+		int posicion = 0; 
+		for(Measurement m : orMeasurements) {
+			float[] filtChannels = new float[validChannels.length];
+			int c = 0;
+			for(int i=0; i<validChannels.length; i++) {
+				int validChannel = validChannels[i];
+				for(int j=0; j<m.numChannels();j++) {
+					if(j==validChannel) {
+						filtChannels[c]=m.getChannel(validChannel);
+					}
+				}
+			} filtMeasurements[posicion]=new Measurement(filtChannels);
+			posicion++;
+		} return new EEGModel(filtMeasurements);
 	}
+	
+
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,8 @@
 package es.upm.aled.lab1.measurements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Filter that extracts the specified period from an EEGModel.
  * 
@@ -30,16 +33,17 @@ public class FilterExtractPeriod implements Filter {
 
 	@Override
 	public EEGModel applyFilter(EEGModel eeg) {
-		EEGModel filteredEEG = new EEGModel();
+		Measurement[] measurements = eeg.getMeasurements();
+		Measurement[] filteredMeasurements = new Measurement[max - min];
+		int posicion = 0;
 		if (min<eeg.getMeasurements().length && max<eeg.getMeasurements().length) {
 			for (int i=min; i<=max; i++) {
-				Measurement m = eeg.getMeasurements()[i];
-				filteredEEG.addMeasurement(m);
+				filteredMeasurements[posicion] = measurements[i];
+				posicion++;
 				} 
-				return filteredEEG;
 			} 
-		return null;
-		}
+			return new EEGModel(filteredMeasurements);
+	}
 		
 		
 }
