@@ -27,6 +27,7 @@ public class Measurement {
 	 * @param numChannel The channel number, starting from 0.
 	 * @return The value measured.
 	 */
+	
 	public float getChannel(int numChannel) {
 		return channels[numChannel];
 	}
