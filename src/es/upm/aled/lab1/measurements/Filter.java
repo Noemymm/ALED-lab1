@@ -14,5 +14,6 @@ public interface Filter {
 	 * @param eeg Model to be filtered.
 	 * @return Filtered model.
 	 */
+	
 	EEGModel applyFilter(EEGModel eeg);
 }
